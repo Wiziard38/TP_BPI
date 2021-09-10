@@ -12,6 +12,10 @@ import joueur_humain
 import joueur_ordi
 import joueur_ordi_malin
 
+class bcolors:
+  RED = '\u001b[31m'
+  BLUE = '\u001b[34m'
+  RESET = '\u001b[0m'
 
 def recupere_chaine_a_afficher(symbole):
     """Renvoie la chaîne de caractère à afficher pour le symbole donné.
@@ -23,10 +27,12 @@ def recupere_chaine_a_afficher(symbole):
 
     précondition : symbole est soit "x" soit "o"
     """
-    
     if symbole == 'x':
-      return ''
+      return bcolors.RED + '\u2715' + bcolors.RESET
+    else:
+      return bcolors.BLUE + '\u25CB' + bcolors.RESET
 
+  
 def affiche_plateau(cases):
     """Affiche le plateau représenté par le tuples cases à 9 éléments.
 
@@ -40,8 +46,16 @@ def affiche_plateau(cases):
         numéro de la case (case libre)
     précondition : cases est un tuple de 9 éléments
     """
-    # TODO
-    ...
+    form = "{0:1}{1:1}{2:1}"
+    tab = [['|','|',''],['|','|',''],['|','|','']]
+    for i in range(9):
+        if cases[i] in 'ox':
+            tab[i//3][i%3] = recupere_chaine_a_afficher(cases[i]) + tab[i//3][i%3]
+        else:
+            tab[i//3][i%3] = ' ' + tab[i//3][i%3]
+    for val in tab:
+        print(form.format(*val))
+
 
 def joue_coup(joueur, joueur_num, cases, symbole):
     """Joue un coup.
@@ -61,10 +75,45 @@ def joue_coup(joueur, joueur_num, cases, symbole):
     précondition : joueur_num est soit l'entier 1 soit l'entier 2
     précondition : cases est un tuple de 9 éléments
     précondition : symbole est soit "x" soit "o"
-
     """
 
+    # Etape 1
+    affiche_plateau(cases)
 
+    # Etape 2
+    numero = joueur.joue_coup(cases, symbole)
+
+    # Etape 3
+    cases[numero] = symbole
+
+    # Etape 4
+    affiche_plateau(cases)
+    
+    if victoire(cases) == symbole:
+      print(f'Le joueur {joueur_num} a gagne !')
+      exit
+    if victoire(cases) != False:
+      print(f'Le joueur ' + (2+joueur_num)%2+1 + ' a gagne !')
+      exit
+    # Etape 5
+    return cases
+      
+
+def victoire(cases):
+    """
+    Fonction qui va regarder si il y a un vainqueur a partir d'un tableau de morpion.
+    Si c'est le cas la fonction retourne le symbole du gagnant.
+    """
+    for i in range(3):
+      if cases[0+3*i] == cases[1+3*i] == cases[2+3*i]:
+        return cases[0+ 3*i]
+      if cases[0+i] == cases[3+i] == cases[6+i]:
+        return cases[0+i]
+    if cases[0] == cases[4] == cases[8]:
+      return cases[0]
+    if cases[2] == cases[4] == cases[6]:
+      return cases[2]
+    return False
 
 def joue_partie():
     """Joue une partie complète de morpion"""
@@ -110,6 +159,8 @@ def joue_partie():
 
     # Si on arrive là, il y a égalité
     print("Match nul !")
+
+    affiche_plateau(cases)
 
 if __name__ == "__main__":
     joue_partie()
