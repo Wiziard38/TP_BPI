@@ -11,6 +11,7 @@
 import joueur_humain
 import joueur_ordi
 import joueur_ordi_malin
+import sys
 
 class bcolors:
   RED = '\u001b[31m'
@@ -87,14 +88,16 @@ def joue_coup(joueur, joueur_num, cases, symbole):
     cases[numero] = symbole
 
     # Etape 4
-    affiche_plateau(cases)
     
-    if victoire(cases) == symbole:
-      print(f'Le joueur {joueur_num} a gagne !')
-      exit
-    if victoire(cases) != False:
-      print(f'Le joueur ' + (2+joueur_num)%2+1 + ' a gagne !')
-      exit
+    (partie_finie, symbole_gagnant) = victoire(cases)
+    if partie_finie:
+      affiche_plateau(cases)
+      if symbole_gagnant == symbole:
+        print(f'Le joueur {joueur_num} a gagne !')
+      else:
+        print('Le joueur ' + (2+joueur_num)%2+1 + ' a gagne !')
+      sys.exit()
+    
     # Etape 5
     return cases
       
@@ -105,15 +108,15 @@ def victoire(cases):
     Si c'est le cas la fonction retourne le symbole du gagnant.
     """
     for i in range(3):
-      if cases[0+3*i] == cases[1+3*i] == cases[2+3*i]:
-        return cases[0+ 3*i]
-      if cases[0+i] == cases[3+i] == cases[6+i]:
-        return cases[0+i]
+      if cases[3*i] == cases[1+3*i] == cases[2+3*i]:
+        return True, cases[3*i]
+      if cases[i] == cases[3+i] == cases[6+i]:
+        return True, cases[i]
     if cases[0] == cases[4] == cases[8]:
-      return cases[0]
+      return True, cases[0]
     if cases[2] == cases[4] == cases[6]:
-      return cases[2]
-    return False
+      return True, cases[2]
+    return False, ''
 
 def joue_partie():
     """Joue une partie complète de morpion"""
