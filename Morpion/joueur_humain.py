@@ -8,8 +8,9 @@ def joue_coup(cases, symbole):
     """
     # morpion.affiche_plateau(cases)
     while True:
-        num_case = int(input("Dans quelle case voulez vous jouer votre coup (de 1 a 9) ? \n > ")) - 1
-        if int(cases[num_case]) == num_case:
-            return num_case
-        else:
-            print("Numero invalide, veuillez entrer un numero de case non occupee")
+        num_case = input("Dans quelle case voulez vous jouer votre coup (de 1 a 9) ? \n > ")
+        if num_case.isnumeric():
+            num_case = int(num_case) - 1
+            if cases[num_case] == str(num_case):
+                return num_case
+        print("Numero invalide, veuillez entrer un numero de case non occupee")
