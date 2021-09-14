@@ -118,6 +118,15 @@ def victoire(cases):
       return True, cases[2]
     return False, ''
 
+def aide_joueur():
+  """ Programme qui va afficher des explications pour un joueur humain."""
+  print("Voici les numéros pour un plateau de morpion : ")
+  form = "{0:1}{1:1}{2:1}"
+  tab = [['1|','2|','3'],['4|','5|','6'],['7|','8|','9']]
+  for val in tab:
+    print(form.format(*val))
+  print()
+
 def joue_partie():
     """Joue une partie complète de morpion"""
 
@@ -148,7 +157,11 @@ def joue_partie():
     cases = ["0", "1", "2",
              "3", "4", "5",
              "6", "7", "8"]
-
+    
+    if (joueur1 or joueur2) == joueur_humain:
+      aide_joueur() # Affichage du plateau pour jouer pour les humains
+      
+    
     # Joue 9 coups au maximum
     joue_coup(joueur1, 1, cases, "x")
     joue_coup(joueur2, 2, cases, "o")
