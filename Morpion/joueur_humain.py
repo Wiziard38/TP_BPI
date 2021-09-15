@@ -11,6 +11,6 @@ def joue_coup(cases, symbole):
         num_case = input("Dans quelle case voulez vous jouer votre coup (de 1 a 9) ? \n > ")
         if num_case.isnumeric():
             num_case = int(num_case) - 1
-            if cases[num_case] == str(num_case):
+            if (-1 < num_case < 9) and cases[num_case] == str(num_case):
                 return num_case
         print("Numero invalide, veuillez entrer un numero de case non occupee")
