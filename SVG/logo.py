@@ -26,8 +26,7 @@ def avance(abscisse, ordonnee, direction, crayon_en_bas, distance):
     if crayon_en_bas: # On trace la ligne si le crayon est descendu
         dep = Point(abscisse, ordonnee)
         arr = Point(abscisse_arrivee, ordonnee_arrivee)
-        print(svg.genere_segment(dep, arr))
-    return (abscisse_arrivee, ordonnee_arrivee)
+    return (abscisse_arrivee, ordonnee_arrivee,svg.genere_segment(dep, arr)) 
 
 def tourne_droite(direction, angle):
     """

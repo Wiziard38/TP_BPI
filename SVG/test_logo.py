@@ -2,90 +2,61 @@
 
 """Programme pour tester le module logo."""
 
+import os
+os.chdir("/Users/mathis/Desktop/TP_BPI/SVG")
 import logo
 import svg
 
 def main():
     """On crée un dessin a l'aide du module logo."""
+    image = open('Mon dessin.svg', 'w+')
 
-    # On démarre notre image SVG
-    print(svg.genere_balise_debut_image(100, 100))
+    # Dimensions de l'image
+    hauteur = int(input("Quelle hauteur de l'image ? \n > "))
+    largeur = int(input("Quelle largeur de l'image ? \n > "))
+    image.write(svg.genere_balise_debut_image(largeur, hauteur))
+
     # En python on peut nommer les arguments quand on appelle une
     # fonction. Cela rend le code beaucoup plus lisible en général.
-    print(svg.genere_balise_debut_groupe(couleur_ligne="black",
+
+    couleur = input("Quelle couleur de ligne voulez-vous choisir (en anglais) ? \n > ")
+    epaisseur = input("Quelle epaisseur de ligne voulez-vous choisir ? \n > ")
+    image.write(svg.genere_balise_debut_groupe(couleur_ligne = couleur,
                                          couleur_remplissage="none",
-                                         epaisseur_ligne=3))
+                                         epaisseur_ligne = epaisseur))
 
     # Notre tortue est représentée par 4 infos :
-    abscisse = 0.0
-    ordonnee = 0.0
-    direction = 90.0  # angle du regard de la tortue en degrés
-    crayon_en_bas = False
-
-    # On se déplace sans dessiner
-    direction = logo.tourne_droite(direction, 180.0)
-    # Ici on fait du tuple unpacking : on récupère d'un coup les 2 éléments du tuple.
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 50.0)
-    direction = logo.tourne_gauche(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 50.0)
-    direction = logo.tourne_gauche(direction, 90.0)
-
-    # On va dessiner un premier truc
+    abscisse = float(input(f"A quelle abscisse voulez vous commencer votre dessin (entre 0 et {largeur}) ? \n > "))
+    ordonnee = float(input(f"A quelle ordonnee voulez vous commencer votre dessin (entre 0 et {hauteur}) ? \n > "))
+    direction = float(input(f"Selon quel angle voulez vous debuter (entre 0 et 360˚) ? \n > "))  # angle du regard de la tortue en degrés
+    
     crayon_en_bas = True
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
+    while True:
+        choix = input(f"Que voulez vous faire ? \n Position actuelle : abs = {abscisse}, ord = {ordonnee}, angle = {direction} \
+                                                \n - Avancer (a) \
+                                                \n - Tourner a droite (d) \
+                                                \n - Tourner a gauche (g) \
+                                                \n - Arreter (x) \
+                                                \n - Changer la position du crayon, actuellement il est " + ("posé" if crayon_en_bas else "levé") + " (c) \
+                                                \n > ")
+        if choix == 'x':
+            break
+        elif choix == 'a':
+            distance =  int(input("De combien voulez vous avancer ? \n > "))
+            abscisse, ordonnee, sortie = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, distance)
+            image.write(sortie)
+        elif choix == 'd':
+            rotation = int(input("De combien voulez vous tourner a droite ? \n > "))
+            direction = logo.tourne_droite(direction, rotation)
+        elif choix == 'g':
+            rotation = int(input("De combien voulez vous tourner a gauche ? \n > "))
+            direction = logo.tourne_gauche(direction, rotation)
+        elif choix == 'c':
+            crayon_en_bas = crayon_en_bas ^ True
 
-    # On se déplace sans dessiner
-    crayon_en_bas = False
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-
-    # On dessine un deuxième truc
-    crayon_en_bas = True
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-
-    # On se déplace sans dessiner
-    crayon_en_bas = False
-    direction = logo.tourne_droite(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 20.0)
-    direction = logo.tourne_gauche(direction, 90.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 10.0)
-
-    # On dessine un troisième truc
-    crayon_en_bas = True
-    direction = logo.tourne_gauche(direction, 45.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 30.0)
-    direction = logo.tourne_gauche(direction, 45.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 30.0)
-    direction = logo.tourne_gauche(direction, 45.0)
-    abscisse, ordonnee = logo.avance(abscisse, ordonnee, direction, crayon_en_bas, 30.0)
-
-    # On termine l'image SVG
-    print(svg.genere_balise_fin_groupe())
-    print(svg.genere_balise_fin_image())
-
-def create_svg():
-    import io
-    import sys
-    import os
-    os.chdir("/Users/mathis/Desktop/TP_BPI")
-    sys.stdout = io.StringIO()
-    main()
-    sortie = sys.stdout.getvalue()   
-    sys.stdout.close()
-    sys.stdout = sys.__stdout__
-    image = open('tortue logo.svg', 'w+')
-    image.write(sortie)
+    image.write(svg.genere_balise_fin_groupe())
+    image.write(svg.genere_balise_fin_image())
     image.close()
 
-create_svg()
+if __name__ == "__main__":
+    main()

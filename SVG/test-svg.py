@@ -1,6 +1,5 @@
 #!/usr/bin/env python 
 
-
 from svg import *
 import collections
 import os
@@ -10,9 +9,22 @@ Point = collections.namedtuple("Point", "x, y")
 def trace_image():
     image = open('mon_image.svg', 'w+')
     
-    hauteur = int(input("Quelle hauteur ?"))
-    largeur = int(input("Quelle largeur ?"))
+    # Dimensions de l'image
+    hauteur = int(input("Quelle hauteur de l'image ? \n > "))
+    largeur = int(input("Quelle largeur de l'image ? \n > "))
     image.write(genere_balise_debut_image(largeur, hauteur))
+
+    # Choix a dessiner
+    # choix = ''
+    # while choix != 'x':
+
+        # choix = input("Que voulez vous dessiner ?   \n - Une ligne (l) \
+        #                                             \n - Un cercle (c) \
+        #                                             \n - Un groupe de formes (g) \
+        #                                             \n - Une figure en avancant / tournant (f) \
+        #                                             \n - Arreter (x) \
+        #                                             \n > ")
+        
 
     couleur_ligne = input("Quelle couleur de ligne ?")
     couleur_rempli = input("Quelle couleur de remplissage ?")
@@ -32,6 +44,7 @@ def trace_image():
     image.write("\t")
     image.write(genere_balise_fin_groupe())
     image.write(genere_balise_fin_image())
+    
     image.close()
 
 trace_image()
