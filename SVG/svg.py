@@ -78,3 +78,25 @@ def genere_segment(dep, arr):
     """
     
     return f"<line x1='{dep.x}' y1='{dep.y}' x2='{arr.x}' y2='{arr.y}'/>\n"
+
+def genere_polygone(points, couleur):
+    """
+    Retourne la chaine de caractères correspondant à un élément SVG représentant un polygone.
+    points est un tableaux de points.
+    """
+
+    chaine = ''
+    for point in points:
+        chaine = chaine + str(point.x) + ',' + str(point.y) + ' '
+    return f'<polygon points="{chaine}", style="fill:{couleur}"/>\n'
+
+def genere_balise_debut_groupe_transp(niveau_opacite):
+    """
+    Retourne la chaine de caractères correspondant à une balise ouvrant un
+    groupe d’éléments qui, dans son ensemble, sera partiellement transparent.
+    Les éléments qui composent le groupe se masquent les uns les autres dans
+    l’ordre d’apparition (ils ne sont pas transparents entre eux).
+    niveau_opacite doit être un nombre entre 0 et 1. Ce groupe doit être refermé
+    de la même manière que les groupes définissant un style.
+    """
+    return f"<g fill-opacity='{niveau_opacite}'> \n"

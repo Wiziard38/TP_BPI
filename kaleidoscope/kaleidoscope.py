@@ -6,33 +6,41 @@ Exercice graphique, quelques boucles, deux modules à écrire.
 import sys
 from math import pi
 
+sys.path.append('C:\\Users\mathi\OneDrive\Documents\TP_BPI\SVG')
+
 import dessin
 import svg
-from triangle import triangle_aleatoire, tourne_triangle_autour
+import triangle 
 
 def genere_image(nombre_triangles):
     """Génère le nombre de triangles demandé aleatoirement, les tourne.
 
     Affiche le SVG correspondant sur la sortie standard.
     """
+
+    transparence = 0.6
     largeur, hauteur = 800.0, 600.0
     print(svg.genere_balise_debut_image(largeur, hauteur))
+    print(svg.genere_balise_debut_groupe_transp(transparence))
+    
     centre = svg.Point(largeur / 2, hauteur / 2)
 
     for _ in range(nombre_triangles):
         # on génère un triangle à l'interieur du quart en bas
         # à droite de l'image.
-        triangle = triangle_aleatoire(
+        triangle_alea = triangle.triangle_aleatoire(
             (largeur / 2, largeur),
             (hauteur / 2, hauteur)
         )
         couleur = dessin.couleur_aleatoire()
+
         # on tourne et on affiche 8 fois le triangle
         for tour in range(8):
             angle = pi / 4 * tour
-            triangle_tourne = tourne_triangle_autour(triangle, centre, angle)
+            triangle_tourne = triangle.tourne_triangle_autour(triangle_alea, centre, angle)
             dessin.affiche_triangle(triangle_tourne, couleur)
 
+    print(svg.genere_balise_fin_groupe())
     print(svg.genere_balise_fin_image())
 
 
