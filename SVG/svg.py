@@ -100,3 +100,15 @@ def genere_balise_debut_groupe_transp(niveau_opacite):
     de la même manière que les groupes définissant un style.
     """
     return f"<g fill-opacity='{niveau_opacite}'> \n"
+
+def genere_balise_debut_texte():
+    """
+    Genere une balise SVG de debut de zone de texte.
+    """
+    return "<text>"
+
+def genere_balise_fin_texte():
+    """
+    Genere une balise SVG de fin de zone de texte.
+    """
+    return "</text>"
