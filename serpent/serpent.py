@@ -17,10 +17,13 @@ def genere_image(hauteur, largeur):
     nb_places_vertical = hauteur // 40
     nb_places_horizontal = largeur // 40
     nombre_lignes = (nb_places_vertical-1)//2 + 1
-    nombre_cases = nb_places_horizontal*(nombre_lignes + 1) - 1
-    (x, y) = (0, 0)
-
+    nombre_cases = nb_places_horizontal*(nombre_lignes) + nombre_lignes - 1
+    
     direction = (nombre_lignes % 2 == 0)
+    if direction:
+        (x, y) = (0, 0)
+    else:
+        (x, y) = (largeur - taille_case, 0)
 
     # Creation
     for i in range(nombre_lignes):
@@ -28,31 +31,32 @@ def genere_image(hauteur, largeur):
             print(creer_carre(x, y, taille_case))
             
             if direction:
-                x += taille_case/2
-                print(f"<text x={x} y={y-8}> {nombre_cases} </text>")
-                x += taille_case/2
+                x += taille_case/4
+                print(f"<text x={x} y={y+35} fill='red'> {nombre_cases} </text>\n")
+                x += taille_case/4*3
                 nombre_cases -= 1
             else:
-                x -= taille_case/2
-                print(f"<text x={x} y={y-8}> {nombre_cases} </text>")
-                x -= taille_case/2
+                x += taille_case/4
+                print(f"<text x={x} y={y+35} fill='red'> {nombre_cases} </text>\n")
+                x -= taille_case/4*5
                 nombre_cases -= 1
 
-        if direction:
-            y -= 10 # On descend
-            x -= 5 # On revient a gauche
+        if direction and nombre_cases != 0:
+            y += taille_case # On descend
+            x -= taille_case/4*3 # On revient a gauche
+            print(f"<text x={x} y={y+35} fill='red'> {nombre_cases} </text>\n")
+            x -= taille_case/4
             print(creer_carre(x, y, taille_case))
-            print(f"<text x={x} y={y-8}> {nombre_cases} </text>")
-            x -= 5
             nombre_cases -= 1
-        else:
-            y -= 10 # On descend
-            x += 5 # On revient a droite
+        elif not(direction)  and nombre_cases != 0:
+            y += taille_case # On descend
+            x += taille_case/4*5 # On revient a droite
+            print(f"<text x={x} y={y+35} fill='red'> {nombre_cases} </text>\n")
+            x -= taille_case/4
             print(creer_carre(x, y, taille_case))
-            print(f"<text x={x} y={y-8}> {nombre_cases} </text>")
-            x += 5
             nombre_cases -= 1
         direction = direction ^ True
+        y += taille_case
 
     print(svg.genere_balise_fin_image())
 
@@ -61,7 +65,7 @@ def creer_carre(x, y, taille):
     """
     Creer in carre de taille donnee a une certaine cordonnee.
     """
-    return f"<rect x={x} y={y} width={taille} height={taille} style='fill:None;stroke:black;stroke-width:2'>\n"
+    return f"<rect x={x} y={y} width={taille} height={taille} style='fill:none;stroke:black;stroke-width:2'/>\n"
 
 
 def main():
