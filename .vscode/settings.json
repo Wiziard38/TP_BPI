@@ -1,5 +1,5 @@
 {
-    "svg.preview.background": "custom",
+    "svg.preview.background": "white",
     "python.pythonPath": "C:\\Users\\mathi\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
     "python.analysis.extraPaths": [
         "./SVG"
