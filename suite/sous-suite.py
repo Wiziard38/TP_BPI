@@ -61,25 +61,12 @@ def traite_nombre(suite, type_suite, nombre):
             return (False, 'croissante')
 
 
-def max_suites(suites):
-    """
-    Renvoie la plus longue sous suite d'une liste de suites.
-    """
-    max_length = 0
-    suite_max = ''
-    for sous_suite in suites:
-        if len(sous_suite) > max_length:
-            max_length = len(sous_suite)
-            suite_max = sous_suite
-    return suite_max
-
-
 def main():
     if len(sys.argv) != 2 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
         print("utilisation:", sys.argv[0], "chemin_fichier")
         sys.exit(1)
     
-    print(max_suites(genere_suites(sys.argv[1])))
+    print(max(genere_suites(sys.argv[1]), key = len))
 
 if __name__ == '__main__':
     main()
