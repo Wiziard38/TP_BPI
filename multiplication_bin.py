@@ -86,5 +86,12 @@ def add_bin(list1, list2):
 
     return list_res
 
+def bin_to_int(bin):
+    res = 0
+    for i in range(len(bin)-1, -1, -1):
+        if bin[i] == 1:
+            res += 2**(len(bin)-i-1)
+    return res
+
 import sys
-print( mult_bin(int(sys.argv[1]), int(sys.argv[2]) ) )
+print(mult_bin(int(sys.argv[1]), int(sys.argv[2]) ) )
