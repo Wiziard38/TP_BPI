@@ -20,6 +20,7 @@ def jeu(niveau):
 
 def affiche_cases(plateau):
     ...
+    print('\x1b[0;47;47m' + '     ' + '\x1b[0m')
 
 
 def main():
