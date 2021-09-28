@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Manipulations complexes de tableaux dynamiques : listes d'intervalles wesh tom"""
+"""Manipulations complexes de tableaux dynamiques : listes d'intervalles """
 
 from collections import namedtuple
 
