@@ -2,6 +2,7 @@
 """Manipulations complexes de tableaux dynamiques : listes d'intervalles """
 
 from collections import namedtuple
+from copy import deepcopy
 
 # Un ensemble de ressource est représenté par un intervalle et le nombre total
 # de ressources qu'il peut contenir.
@@ -89,8 +90,49 @@ def enleve(ensemble_ressources, nb_ressources):
       taille que l'ensemble donné contenant uniquement les ressources qui ont
       été enlevées.
       """
-      # TODO
-      ...
+      tmp = len(ensemble_ressources.intervalles)
+      interval_precedent = [0, 0]
+      ensemble_enleve = deepcopy(ensemble_ressources)
+
+      for indice, interval in enumerate(ensemble_ressources.intervalles):
+            if interval[0] <= nb_ressources < interval[1]:
+                  # Modif de l'ensemble d'arrivée
+                  for k in range(indice, tmp):
+                        ensemble_enleve.intervalles.pop(indice)
+                  
+                  # Modif de l'ensemble de départ
+                  for k in range(0, indice + 1):
+                        ensemble_ressources.intervalles.pop(0)
+
+                  if interval[0] != nb_ressources:
+                        ensemble_enleve.intervalles.append([interval[0], nb_ressources])
+                  ensemble_ressources.intervalles.insert(0, [nb_ressources, interval[1]])
+            
+            elif interval_precedent[1] < nb_ressources < interval[0]:
+                  # Modif de l'ensemble d'arrivée
+                  for k in range(indice, tmp):
+                        ensemble_enleve.intervalles.pop(k)
+                  
+                  # Modif de l'ensemble de départ
+                  for k in range(0, indice):
+                        ensemble_ressources.intervalles.pop(k)
+
+            elif nb_ressources == interval[1]:
+                  # Modif de l'ensemble d'arrivée
+                  for k in range(indice, tmp):
+                        ensemble_enleve.intervalles.pop(indice)
+                  
+                  # Modif de l'ensemble de départ
+                  for k in range(0, indice + 1):
+                        ensemble_ressources.intervalles.pop(0)
+
+                  ensemble_enleve.intervalles.append([interval[0], nb_ressources])
+
+            elif indice == 0 and nb_ressources < interval[0]:
+                  return EnsembleRessources([], nb_ressources)
+
+            interval_precedent = interval
+      return ensemble_enleve
 
 
 def test():
@@ -116,4 +158,8 @@ def test():
           ressources_disponibles.intervalles)
 
 if __name__ == "__main__":
-    test()
+      #test()
+      for i in range(10):
+            ens = EnsembleRessources([[0, 4], [7, 9]], 10)
+            enl = enleve(ens, i)
+            print(' \n \n ens = ', ens, '\n enleve = ', enl, '\n \n')
