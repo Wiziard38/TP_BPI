@@ -102,7 +102,7 @@ def genere_graphe(suivants):
                 fichier_dot.write(f"{mot1} -> {mot2} [label = {occurences}] \n")
 
     # On utilise l'outil dot pour convertir le fichier .dot en image
-    # system("dot -Tpng mots-suivants.dot -o mots-suivants.png")
+    system("dot -Tpng mots-suivants.dot -o mots-suivants.png")
 
 
 def get_suivant_aleatoire(mot, suivants):

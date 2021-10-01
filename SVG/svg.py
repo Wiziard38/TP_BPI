@@ -112,3 +112,9 @@ def genere_balise_fin_texte():
     Genere une balise SVG de fin de zone de texte.
     """
     return "</text>"
+
+def genere_rectangle(top_left, width, height):
+    """
+    Retourne la chaine de caractères correspondant à un élément SVG représentant un rectangle.
+    """
+    return f"<rect x='{top_left.x}' y='{top_left.y}' width='{width}' height='{height}'> \n"
