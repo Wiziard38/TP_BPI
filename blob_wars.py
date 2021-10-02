@@ -23,9 +23,9 @@ def affiche_tab(tableau):
     for i in range(8):
         for j in range(8):
             if tableau[63 - (i*8 + j)] == 'rouge':
-                tab[i][j] = '\u001b[31m \u25CF \u001b[0m'
+                tab[i][7-j] = '\u001b[31m \u25CF \u001b[0m'
             elif tableau[63 - (i*8 + j)] == 'bleu':
-                tab[i][j] = '\u001b[34m \u25CF \u001b[0m'
+                tab[i][7-j] = '\u001b[34m \u25CF \u001b[0m'
             else:
                 if 0 < 63 - (i*8 + j) < 10:
                     tab[i][7-j] = '0' + str(63 - (i*8 + j))
@@ -46,10 +46,12 @@ def jeu_blob(tableau):
     while True:
 
         if fin_partie(tableau, joueur):
+            affiche_tab(tableau)
             gagnant(tableau)
             break
         
         affiche_tab(tableau)
+
         print(f"Joueur {joueur} veuillez entrer un coup")
         print("Le format doit etre 'depart arrivee', par exemple '0 8'")
         (depart, arrivee) = input("C'est a vous : ").split(' ')
@@ -96,7 +98,8 @@ def changement_saut(arrivee, joueur, tableau):
     def changement(ligne, colonne, tableau, joueur, joueur2):
         """ Inversion de couleur dans le tableau """
         if tableau[ligne*8 + colonne] == joueur2:
-            tableau[ligne*8 + colonne] == joueur
+            tableau[ligne*8 + colonne] = joueur
+        return tableau
 
     if ligne_arr != 7:
         changement(ligne_arr + 1, colonne_arr, tableau, joueur, joueur2)
@@ -112,6 +115,8 @@ def changement_saut(arrivee, joueur, tableau):
             changement(ligne_arr - 1, colonne_arr + 1, tableau, joueur, joueur2)
         if colonne_arr != 0:
             changement(ligne_arr - 1, colonne_arr - 1, tableau, joueur, joueur2)
+
+    return tableau
 
 
 def fin_partie(tableau, joueur):
