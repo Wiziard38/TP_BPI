@@ -94,12 +94,13 @@ def genere_graphe(suivants):
     # On créer un fichier au format texte dot, utilisé pour
     # décrire un graphe.
     with open("mots-suivants.dot", "w") as fichier_dot:
-        fichier_dot.write('disgraph { \n')
+        fichier_dot.write('digraph { \n')
         while suivants:
             (mot1, dict_suiv) = suivants.popitem()
             while dict_suiv:
                 (mot2, occurences) = dict_suiv.popitem()
                 fichier_dot.write(f"{mot1} -> {mot2} [label = {occurences}] \n")
+        fichier_dot.write('}')
 
     # On utilise l'outil dot pour convertir le fichier .dot en image
     system("dot -Tpng mots-suivants.dot -o mots-suivants.png")

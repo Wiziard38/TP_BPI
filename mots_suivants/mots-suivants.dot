@@ -1,4 +1,4 @@
-disgraph { 
+digraph { 
 serpents -> pythons [label = 1] 
 dit -> on [label = 1] 
 digerent -> dit [label = 1] 
@@ -347,3 +347,4 @@ est -> triste [label = 1]
 est -> un [label = 2] 
 c -> etait [label = 1] 
 c -> est [label = 6] 
+}
