@@ -2,6 +2,7 @@
 """Manipulations complexes de tableaux dynamiques : listes d'intervalles """
 
 from collections import namedtuple
+from copy import deepcopy
 
 # Un ensemble de ressource est représenté par un intervalle et le nombre total
 # de ressources qu'il peut contenir.
@@ -77,26 +78,19 @@ def ajoute(ensemble_ressources, ensemble_ressources_a_ajouter):
       tableaux dynamiques d'intervalles de ces deux ressources sont triés.
       """
       
-      intervalles = ensemble_ressources_a_ajouter.intervalles
-      for interval in ensemble_ressources.intervalles:
-            intervalles.append(interval)
-      intervalles.sort()
+      for interval in ensemble_ressources_a_ajouter.intervalles:
+            ensemble_ressources.intervalles.append(interval)
+      ensemble_ressources.intervalles.sort()
 
-      
-
-
-
-      if not(ensemble_ressources.intervalles):
-            for interval in intervalles:
-                  ensemble_ressources.intervalles.insert(0, interval)
-      elif ensemble_ressources_a_ajouter.intervalles[-1][1] != ensemble_ressources.intervalles[0][0]:
-            for interval in intervalles:
-                  ensemble_ressources.intervalles.insert(0, interval)
-      else:
-            (_, nb_fin) = ensemble_ressources.intervalles.pop(1)
-            ensemble_ressources.intervalles.insert(0, [intervalles[0][0], nb_fin])
-            for interval in intervalles[1:]:
-                  ensemble_ressources.intervalles.insert(0, interval)
+      if len(ensemble_ressources.intervalles) > 1:
+            interval_precedent = ensemble_ressources.intervalles[0]
+            for interval in ensemble_ressources.intervalles[1:]:
+                  if interval_precedent[1] == interval[0]:
+                        ensemble_ressources.intervalles.remove(interval_precedent)
+                        ensemble_ressources.intervalles.remove(interval)
+                        ensemble_ressources.intervalles.append([interval_precedent[0], interval[1]])
+                        ensemble_ressources.intervalles.sort()
+                        break
 
 
 def enleve(ensemble_ressources, nb_ressources):
@@ -138,6 +132,7 @@ def test():
     ajoute(ressources_disponibles, ressources_reservees[1])
     print("Disponibles après appel à ajout avec ressources 2 et 3     :",
           get_chaine(ressources_disponibles))
+    print(ressources_reservees[3])
     ajoute(ressources_disponibles, ressources_reservees[3])
 
     print('\n', ressources_disponibles, '\n')
