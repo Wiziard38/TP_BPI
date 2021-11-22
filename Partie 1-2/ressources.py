@@ -2,7 +2,6 @@
 """Manipulations complexes de tableaux dynamiques : listes d'intervalles """
 
 from collections import namedtuple
-from copy import deepcopy
 
 # Un ensemble de ressource est représenté par un intervalle et le nombre total
 # de ressources qu'il peut contenir.
