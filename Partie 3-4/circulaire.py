@@ -35,12 +35,10 @@ class ListeSimplementChaineeTriee:
         cellule_courante = self.tete
         if nombres:
             for indice, valeur in enumerate(nombres):
-                if indice != len(nombres) - 1:
-                    cellule_suivante = Cellule(valeur, None)
-                    cellule_courante.suivant = cellule_suivante
-                    cellule_courante = cellule_suivante
-                else:
-                    cellule_courante.suivant = self.tete
+                cellule_suivante = Cellule(valeur, None)
+                cellule_courante.suivant = cellule_suivante
+                cellule_courante = cellule_suivante
+            cellule_courante.suivant = self.tete
 
     def __str__(self):
         """Renvoie la chaîne de caractères "val1 --> val2 --> val3 ..." """
@@ -148,7 +146,6 @@ def test():
     supprime(liste_chainee, 5)
     ajoute(liste_chainee, 8)
     supprime(liste_chainee, 8)
-    ajoute(liste_chainee, 5)
     print("liste_chainee :", liste_chainee)
 
     # On trace notre liste
