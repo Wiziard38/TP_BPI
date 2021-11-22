@@ -21,7 +21,6 @@ class ListeSimplementChainee:
     """
     def __init__(self):
         self.tete = None
-        self.queue = None
 
 def ajoute_en_tete(liste_chainee, valeur):
     """ Ajoute une cellule en tete. """
@@ -37,9 +36,10 @@ def recupere_cellules(liste_chainee):
     """ Renvoie un vecteur contenant toutes les cellules de la liste_chainee. """
     liste_valeur = []
     cellule = liste_chainee.tete
-    while cellule.suivant is not None:
+    while cellule.suivant.valeur is not None:
         liste_valeur.append(cellule.valeur)
         cellule = cellule.suivant
+    return liste_valeur
 
 def recherche(liste_chainee, valeur):
     """Recherche uen valeur dans la liste_chainee donnée.
