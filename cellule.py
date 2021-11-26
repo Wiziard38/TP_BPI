@@ -3,6 +3,42 @@
 
 import traceur
 
+class ListeSimplementChaineeTriee:
+    """Listes simplement chaînées, triées, circulaires et avec sentinelle."""
+
+    def __init__(self, sentinelle, nombres=None):
+        """Construit la liste avec le range de nombres donné.
+
+        `sentinelle` precise la valeur de la cellule sentinelle.
+        pre-condition: le range de nombres donné est trié si il est
+                       différent de None.
+        Si le range est différent de None, on créera directement les cellules
+        ici dans le constructeur. Autrement dit, on n'utilisera pas la fonction
+        ajoute.
+        """
+
+        self.tete = Cellule(sentinelle, None)
+        cellule_courante = self.tete
+        if nombres:
+            for valeur in nombres:
+                cellule_suivante = Cellule(valeur, None)
+                cellule_courante.suivant = cellule_suivante
+                cellule_courante = cellule_suivante
+            cellule_courante.suivant = self.tete
+
+    def __str__(self):
+        """Renvoie la chaîne de caractères "val1 --> val2 --> val3 ..." """
+        cellule_courante = self.tete
+        sentinelle = cellule_courante.valeur
+        cellule_courante = cellule_courante.suivant
+        if cellule_courante.valeur == sentinelle:
+            return ''
+        chaine = f'{cellule_courante.valeur}'
+        while cellule_courante.suivant.valeur != sentinelle:
+            cellule_courante = cellule_courante.suivant
+            chaine += f' --> {cellule_courante.valeur}'
+        return chaine
+
 class Cellule:
     """ Une cellule d'une liste simplement chaînée.
     Possède une référence vers la valeur et

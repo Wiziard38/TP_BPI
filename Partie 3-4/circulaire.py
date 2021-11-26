@@ -34,7 +34,7 @@ class ListeSimplementChaineeTriee:
         self.tete = Cellule(sentinelle, None)
         cellule_courante = self.tete
         if nombres:
-            for indice, valeur in enumerate(nombres):
+            for valeur in nombres:
                 cellule_suivante = Cellule(valeur, None)
                 cellule_courante.suivant = cellule_suivante
                 cellule_courante = cellule_suivante
@@ -61,7 +61,8 @@ def ajoute(liste_chainee, valeur):
     """
     sentinelle = liste_chainee.tete.valeur
     cellule_courante = liste_chainee.tete
-    while cellule_courante.suivant.valeur < valeur and cellule_courante.suivant.valeur != sentinelle:
+    while cellule_courante.suivant.valeur < valeur and\
+        cellule_courante.suivant.valeur != sentinelle:
         cellule_courante = cellule_courante.suivant
     if cellule_courante.suivant.valeur == sentinelle:
         cellule_courante.suivant = Cellule(valeur, liste_chainee.tete)
@@ -76,7 +77,8 @@ def supprime(liste_chainee, valeur):
     """
     sentinelle = liste_chainee.tete.valeur
     cellule_courante = liste_chainee.tete
-    while cellule_courante.suivant.valeur != valeur and cellule_courante.suivant.valeur != sentinelle:
+    while cellule_courante.suivant.valeur != valeur and\
+        cellule_courante.suivant.valeur != sentinelle:
         cellule_courante = cellule_courante.suivant
     if cellule_courante.suivant.valeur != sentinelle:
         cellule_courante.suivant = cellule_courante.suivant.suivant
