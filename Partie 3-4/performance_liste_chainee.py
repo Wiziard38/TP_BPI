@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
+import time
 from collections import deque
 import matplotlib.pyplot as plt
-import time
 
 class CelluleSimple:
     def __init__(self, valeur, suivant):
@@ -57,18 +57,15 @@ def remove_double(liste_double_chainee):
             liste_double_chainee.tete = None
 
 def main():
-    number = int(sys.argv[1])
-
     list_times_simple = []
     list_times_double = []
     list_times_module = []
-    liste_simple_chainee = ListeSimplementChainee('a'*number)
-    liste_double_chainee = ListeDoublementChainee('a'*number)
-    liste_module_chainee = deque(iter('a'*number))
 
-    for _ in range(number//10):
+    for i in range(10, 100000, 1000):
+
         # liste simple :
         temps = 0
+        liste_simple_chainee = ListeSimplementChainee('a'*i)
         for _ in range(10):
             tmp = time.time()
             remove_simple(liste_simple_chainee)
@@ -76,6 +73,7 @@ def main():
         list_times_simple.append(temps)
 
         # liste double :
+        liste_double_chainee = ListeDoublementChainee('a'*i)
         temps = 0
         for _ in range(10):
             tmp = time.time()
@@ -84,6 +82,7 @@ def main():
         list_times_double.append(temps)
 
         # liste module :
+        liste_module_chainee = deque(iter('a'*i))
         temps = 0
         for _ in range(10):
             tmp = time.time()
@@ -91,7 +90,7 @@ def main():
             temps += time.time() - tmp
         list_times_module.append(temps)
 
-    list_number = list(range(number, 0, -10))
+    list_number = list(range(10, 100000, 1000))
     plt.plot(list_number, list_times_simple, label='liste simple')
     plt.plot(list_number, list_times_double, label='liste double')
     plt.plot(list_number, list_times_module, label='deque')
