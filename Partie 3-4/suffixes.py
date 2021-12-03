@@ -47,10 +47,10 @@ def recupere_cellules(liste_chainee):
     """Générateur renvoyant un itérateur sur toutes les cellules."""
     if liste_chainee.tete is not None:
         cellule_courante = liste_chainee.tete
-        yield cellule_courante.valeur
+        yield cellule_courante
         while cellule_courante.suivant is not None:
             cellule_courante = cellule_courante.suivant
-            yield cellule_courante.valeur
+            yield cellule_courante
 
 def ajoute_suffixe(liste_chainee, autre):
     """Ajoute la liste chaînée `autre` à la fin de `liste_chainee`.
@@ -60,33 +60,39 @@ def ajoute_suffixe(liste_chainee, autre):
     il faut dédoubler toute la partie partagée avant l'ajout pour ne pas changer
     les autres listes chaînées utilisant cette fin.
     """
-    flag = False
+    if autre.taille == 0:
+        return
+
     iter_cellules_liste = recupere_cellules(liste_chainee)
-    cellule_courante_liste = None
     iter_cellules_autres = recupere_cellules(autre)
-    cellule_courante_autre = None
+    cellule_courante_liste = None
 
     for cellule_suivante_liste in iter_cellules_liste:
         if cellule_suivante_liste.utilisation == 1:
             cellule_courante_liste = cellule_suivante_liste
         else:
-            cellule_courante_liste.suivant = Cellule(cellule_suivante_liste.valeur, None)
-            cellule_courante_liste = cellule_courante_liste.suivant
-            for cellule_suivante_liste in iter_cellules_liste:
+            cellule_suivante_liste.utilisation -= 1
+            if cellule_courante_liste is None:
+                liste_chainee.tete = Cellule(cellule_suivante_liste.valeur, None)
+                cellule_courante_liste = liste_chainee.tete
+            else:
                 cellule_courante_liste.suivant = Cellule(cellule_suivante_liste.valeur, None)
-            cellule_courante_liste = cellule_courante_liste.suivant
+                cellule_courante_liste = cellule_courante_liste.suivant
+            for cellule_duplique in iter_cellules_liste:
+                cellule_courante_liste.suivant = Cellule(cellule_duplique.valeur, None)
+                cellule_courante_liste = cellule_courante_liste.suivant
 
     flag = False
-    for cellule_suivante_autre in iter_cellules_autres:
-        if flag is False: # Premiere cellule:
+    for cellule_courante_autre in iter_cellules_autres:
+        if not flag: # Premiere cellule:
             flag = True
-            cellule_suivante_autre.utilisation += 1
+            cellule_courante_autre.utilisation += 1
         if cellule_courante_liste is None:
-            liste_chainee.tete = cellule_suivante_autre
-            cellule_courante_liste = cellule_suivante_autre
+            liste_chainee.tete = cellule_courante_autre
+            cellule_courante_liste = cellule_courante_autre
         else:
             cellule_courante_liste.suivant = cellule_courante_autre
-            cellule_courante_liste = cellule_suivante_autre
+            cellule_courante_liste = cellule_courante_autre
 
     liste_chainee.taille = liste_chainee.taille + autre.taille
 
@@ -133,6 +139,7 @@ def teste_listes():
 
     liste_chainee_nt = ListeSimplementChainee("NT")
     print("on ajoute 'NT' apres 'PASSE'")
+
     ajoute_suffixe(listes_chainees[1], liste_chainee_nt)
     print(*listes_chainees, liste_chainee_nt, sep="\n")
 
