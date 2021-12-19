@@ -14,51 +14,10 @@ def genere_labyrinthe(top_left, down_right, entree, sortie, taille_case, image, 
     """ Fonction qui trace le labyrinthe en appelant une fonction récursive"""
 
     if down_right[0] - top_left[0] <= taille_case and down_right[1] - top_left[1] <= taille_case:
-        if trace is False:
-            return
-
-        print(svg.genere_balise_debut_groupe('red', 'none', 3), file = image)
-        entree_sortie = set()
-        if entree[0] == entree[2]: # entree verticale
-            if sortie[0] == sortie[2]:
-                entree_sortie = {'droite', 'gauche'}
-            else: # sortie horizontale
-                if entree[0] < max(sortie[0], sortie[2]):
-                    entree_sortie.add('gauche')
-                else:
-                    entree_sortie.add('droite')
-                if sortie[1] < max(entree[1], entree[3]):
-                    entree_sortie.add('haut')
-                else:
-                    entree_sortie.add('bas')
-        else: # entree horizontale
-            if sortie[1] == sortie[3]:
-                entree_sortie = {'bas', 'haut'}
-            else: # sortie verticale
-                if entree[1] < max(sortie[1], sortie[3]):
-                    entree_sortie.add('haut')
-                else:
-                    entree_sortie.add('bas')
-                if sortie[0] < max(entree[0], entree[2]):
-                    entree_sortie.add('gauche')
-                else:
-                    entree_sortie.add('droite')
-
-        haut_gauche = [min(entree[0], sortie[0]), min([entree[1], sortie[1]])]
-        if 'haut' in entree_sortie:
-            print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1]), \
-                    svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2)), file = image)
-        if 'bas' in entree_sortie:
-            print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2), \
-                    svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case)), file = image)
-        if 'droite' in entree_sortie:
-            print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2), \
-                    svg.Point(haut_gauche[0] + taille_case, haut_gauche[1] + taille_case/2)), file = image)
-        if 'gauche' in entree_sortie:
-            print(svg.genere_segment(svg.Point(haut_gauche[0], haut_gauche[1] + taille_case/2), \
-                    svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2)), file = image)
-
-        print(svg.genere_balise_fin_groupe(), file = image)
+        if trace is True:
+            entree_sortie = recupere_entree_sortie(entree, sortie)
+            haut_gauche = [min(entree[0], sortie[0]), min([entree[1], sortie[1]])]
+            trace_solution(entree_sortie, haut_gauche, taille_case, image)
         return
 
     # On regarde si le rectangle est plus en largeur ou en hauteur
@@ -113,6 +72,53 @@ def genere_labyrinthe(top_left, down_right, entree, sortie, taille_case, image, 
             else:
                 genere_labyrinthe(top_left, [down_right[0], position_barre], [], [], taille_case, image)
                 genere_labyrinthe([top_left[0], position_barre], down_right, entree, sortie, taille_case, image, trace = True)
+
+
+def recupere_entree_sortie(entree, sortie):
+    """ Fonction qui récupérer les paramètres pour tracer la solution. """
+    entree_sortie = set()
+    if entree[0] == entree[2]: # entree verticale
+        if sortie[0] == sortie[2]:
+            entree_sortie = {'droite', 'gauche'}
+        else: # sortie horizontale
+            if entree[0] < max(sortie[0], sortie[2]):
+                entree_sortie.add('gauche')
+            else:
+                entree_sortie.add('droite')
+            if sortie[1] < max(entree[1], entree[3]):
+                entree_sortie.add('haut')
+            else:
+                entree_sortie.add('bas')
+    else: # entree horizontale
+        if sortie[1] == sortie[3]:
+            entree_sortie = {'bas', 'haut'}
+        else: # sortie verticale
+            if entree[1] < max(sortie[1], sortie[3]):
+                entree_sortie.add('haut')
+            else:
+                entree_sortie.add('bas')
+            if sortie[0] < max(entree[0], entree[2]):
+                entree_sortie.add('gauche')
+            else:
+                entree_sortie.add('droite')
+    return entree_sortie
+
+def trace_solution(entree_sortie, haut_gauche, taille_case, image):
+    """ Fonction qui trace la solution dans le fichier. """
+    print(svg.genere_balise_debut_groupe('red', 'none', 3), file = image)
+    if 'haut' in entree_sortie:
+        print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1]), \
+                svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2)), file = image)
+    if 'bas' in entree_sortie:
+        print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2), \
+                svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case)), file = image)
+    if 'droite' in entree_sortie:
+        print(svg.genere_segment(svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2), \
+                svg.Point(haut_gauche[0] + taille_case, haut_gauche[1] + taille_case/2)), file = image)
+    if 'gauche' in entree_sortie:
+        print(svg.genere_segment(svg.Point(haut_gauche[0], haut_gauche[1] + taille_case/2), \
+                svg.Point(haut_gauche[0] + taille_case/2, haut_gauche[1] + taille_case/2)), file = image)
+    print(svg.genere_balise_fin_groupe(), file = image)
 
 
 def main():
