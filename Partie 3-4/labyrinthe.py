@@ -7,6 +7,7 @@ format d'une image svg.
 """
 
 from random import randint
+import sys
 import svg
 
 
@@ -149,7 +150,10 @@ def main():
 
     # Labyrinthe
     print(svg.genere_balise_debut_groupe('black', None, 3), file = image)
-    genere_labyrinthe([0, 0], [600, 400], [0, 0, 10, 0], [590, 400, 600, 400], taille_case, image, trace = True)
+    if len(sys.argv) > 1 and sys.argv[1] == 'True':
+        genere_labyrinthe([0, 0], [600, 400], [0, 0, 10, 0], [590, 400, 600, 400], taille_case, image, trace = True)
+    else:
+        genere_labyrinthe([0, 0], [600, 400], [0, 0, 10, 0], [590, 400, 600, 400], taille_case, image)
     print(svg.genere_balise_fin_groupe(), file = image)
 
     print(svg.genere_balise_fin_image(), file = image)
