@@ -127,33 +127,32 @@ def main():
     de création du labyrinthe. """
     # initialisation
     image = open("labyrinthe.svg", 'w')
-    nb_cases_largeur = 60
-    nb_cases_hauteur = 40
+    largeur = 800
+    hauteur = 600
     taille_case = 10
 
-    print(svg.genere_balise_debut_image(taille_case * nb_cases_largeur, taille_case * \
-        nb_cases_hauteur), file = image)
+    print(svg.genere_balise_debut_image(largeur, hauteur), file = image)
 
     # Font blanc
     print(svg.genere_balise_debut_groupe('white', 'white', 0), file = image)
-    print(svg.genere_rectangle(svg.Point(0, 0), nb_cases_largeur*taille_case, nb_cases_hauteur*taille_case), file = image)
+    print(svg.genere_rectangle(svg.Point(0, 0), largeur, hauteur), file = image)
     print(svg.genere_balise_fin_groupe(), file = image)
 
     # Contour
     print(svg.genere_balise_debut_groupe('black', None, 5), file = image)
-    print(svg.genere_rectangle(svg.Point(0, 0), 600, 400), file = image)
+    print(svg.genere_rectangle(svg.Point(0, 0), largeur, hauteur), file = image)
     print(svg.genere_balise_fin_groupe(), file = image)
     print(svg.genere_balise_debut_groupe('white', 'white', 0), file = image)
     print(svg.genere_rectangle(svg.Point(2.5, 0), 7.5, 10), file = image)
-    print(svg.genere_rectangle(svg.Point(587.5, 390), 10, 10), file = image)
+    print(svg.genere_rectangle(svg.Point(hauteur - taille_case -2.5, largeur - taille_case), 10, 10), file = image)
     print(svg.genere_balise_fin_groupe(), file = image)
 
     # Labyrinthe
     print(svg.genere_balise_debut_groupe('black', None, 3), file = image)
     if len(sys.argv) > 1 and sys.argv[1] == 'True':
-        genere_labyrinthe([0, 0], [600, 400], [0, 0, 10, 0], [590, 400, 600, 400], taille_case, image, trace = True)
+        genere_labyrinthe([0, 0], [largeur, hauteur], [0, 0, 10, 0], [largeur-10, hauteur, largeur, hauteur], taille_case, image, trace = True)
     else:
-        genere_labyrinthe([0, 0], [600, 400], [0, 0, 10, 0], [590, 400, 600, 400], taille_case, image)
+        genere_labyrinthe([0, 0], [largeur, hauteur], [0, 0, 10, 0], [largeur-10, hauteur, largeur, hauteur], taille_case, image)
     print(svg.genere_balise_fin_groupe(), file = image)
 
     print(svg.genere_balise_fin_image(), file = image)
