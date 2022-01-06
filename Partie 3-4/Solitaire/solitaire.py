@@ -7,12 +7,49 @@ import sys
 import plateau
 
 def calcule_solution(plat):
-    """Renvoie la suite des coups à jouer **à l'envers** pour gagner.
+    """Renvoie la suite des coups à jouer *à l'envers* pour gagner.
 
     Renvoie None si on ne peut pas gagner.
     """
-    # TODO
-    ...
+    def _coups_possibles(plat):
+        """ Fonction qui renvoie un interateur comprenant la liste des
+        coups possibles dans une position donnée. """
+        combis_possibles = []
+        combinaisons = [(0,1,3), (0,2,5), (1,3,6), (1,4,8), (2,4,7), (2,5,9),
+            (3,6,10), (3,7,12), (3,4,5), (4,7,11), (4,8,13), (5,8,12), (5,9,14),
+            (6,7,8), (7,8,9), (10,11,12), (11,12,13), (12,13,14)]
+        for combi in combinaisons:
+            if (not(plat.cases[combi[0]]) and plat.cases[combi[1]] and plat.cases[combi[2]]) or \
+               (not(plat.cases[combi[2]]) and plat.cases[combi[1]] and plat.cases[combi[0]]):
+               combis_possibles.append(combi)
+        return combis_possibles
+
+    def _calcule_solution_rec(plat, coups):
+        """ Fonction rcursive du calcul d'une solution"""
+        if plateau.est_gagnant(plat):
+            return coups
+        combinaisons_possibles = _coups_possibles(plat)
+        if len(combinaisons_possibles) == 0:
+            return
+        for combi in combinaisons_possibles:
+            # On inverse les cases du plateau
+            for case in combi:
+                plat.cases[case] = plat.cases[case] ^ 1 # xor logique
+            # On ajoute le coup
+            if plat.cases[combi[0]] == 0:
+                coups.append(combi)
+            else:
+                coups.append(combi[::-1])
+
+            _calcule_solution_rec(plat, coups)
+
+            # On enleve le coup et on re-inverse les cases du plateau
+            coups.pop()
+            for case in combi:
+                plat.cases[case] = plat.cases[case] ^ 1 # xor logique
+    
+    return _calcule_solution_rec(plat, [])
+
 
 def demande_coup(plat):
     """Demande quel coup jouer à l'utilisateur."""
@@ -101,4 +138,5 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    plat = plateau.Plateau()
+    print(calcule_solution(plat))
