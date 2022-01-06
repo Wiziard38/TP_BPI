@@ -13,7 +13,7 @@ class Plateau:
     """
     def __init__(self):
         self.cases = [PION for _ in range(15)]
-        self.cases[0] = VIDE
+        self.cases[12] = VIDE
         self.numero_affichage = 0
 
 # Pour rendre le code plus lisible
