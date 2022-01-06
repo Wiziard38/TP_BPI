@@ -7,120 +7,31 @@ import sys
 import plateau
 
 
-
-
-
-
-
-
-
-
 def calcule_solution(plat):
     """Renvoie la suite des coups à jouer *à l'envers* pour gagner.
 
     Renvoie None si on ne peut pas gagner.
     """
-    def _coups_possibles(plat):
-        """ Fonction qui renvoie un interateur comprenant la liste des
-        coups possibles dans une position donnée. """
-        combis_possibles = []
-        combinaisons = [(0,1,3), (0,2,5), (1,3,6), (1,4,8), (2,4,7), (2,5,9),
-            (3,6,10), (3,7,12), (3,4,5), (4,7,11), (4,8,13), (5,8,12), (5,9,14),
-            (6,7,8), (7,8,9), (10,11,12), (11,12,13), (12,13,14)]
-        for combi in combinaisons:
-            if (plat.cases[combi[1]] == plateau.PION and plat.cases[combi[0]] == plateau.PION and plat.cases[combi[2]] == plateau.VIDE) \
-                or (plat.cases[combi[1]] == plateau.PION and plat.cases[combi[0]] == plateau.VIDE and plat.cases[combi[2]] == plateau.PION):
-                combis_possibles.append(combi)
-        return combis_possibles
-
-    def _calcule_solution_rec(plat):
+    def _calcule_solution_rec(plat, coups):
         """ Fonction rcursive du calcul d'une solution"""
-        combinaisons_possibles = _coups_possibles(plat)
-        if len(combinaisons_possibles) == 0:
+        for combi in plateau.recupere_coups(plat):
+            # On inverse les cases du plateau et ajoute le coup
+            plat.cases[combi[0]] = plateau.VIDE
+            plat.cases[combi[1]] = plateau.VIDE
+            plat.cases[combi[2]] = plateau.PION
+            coups.append(combi)
+
+            _calcule_solution_rec(plat, coups)
             if plateau.est_gagnant(plat):
-                return True
-        else:
-            for combi in combinaisons_possibles:
-                # On inverse la combinaison (symetrie)
-                if plat.cases[combi[0]] == plateau.VIDE:
-                    combi = combi[::-1]
+                return coups
 
-                # On inverse les cases du plateau
-                plat.cases[combi[0]] = plateau.VIDE
-                plat.cases[combi[1]] = plateau.VIDE
-                plat.cases[combi[2]] = plateau.PION
+            # On enleve le coup et on re-inverse les cases du plateau
+            coups.pop()
+            plat.cases[combi[0]] = plateau.PION
+            plat.cases[combi[1]] = plateau.PION
+            plat.cases[combi[2]] = plateau.VIDE
 
-                if _calcule_solution_rec(plat):
-                    print(f'depart : {combi[0]}, arrivee : {combi[2]}')
-                    return True
-
-                # On enleve le coup et on re-inverse les cases du plateau
-                plat.cases[combi[0]] = plateau.PION
-                plat.cases[combi[1]] = plateau.PION
-                plat.cases[combi[2]] = plateau.VIDE
-
-    coups = _calcule_solution_rec(plat)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def calcule_solution(plat):
-#     """Renvoie la suite des coups à jouer *à l'envers* pour gagner.
-
-#     Renvoie None si on ne peut pas gagner.
-#     """
-#     def _coups_possibles(plat):
-#         """ Fonction qui renvoie un interateur comprenant la liste des
-#         coups possibles dans une position donnée. """
-#         combis_possibles = []
-#         combinaisons = [(0,1,3), (0,2,5), (1,3,6), (1,4,8), (2,4,7), (2,5,9),
-#             (3,6,10), (3,7,12), (3,4,5), (4,7,11), (4,8,13), (5,8,12), (5,9,14),
-#             (6,7,8), (7,8,9), (10,11,12), (11,12,13), (12,13,14)]
-#         for combi in combinaisons:
-#             if (plat.cases[combi[1]] == plateau.PION and plat.cases[combi[0]] == plateau.PION and plat.cases[combi[2]] == plateau.VIDE) \
-#                 or (plat.cases[combi[1]] == plateau.PION and plat.cases[combi[0]] == plateau.VIDE and plat.cases[combi[2]] == plateau.PION):
-#                 combis_possibles.append(combi)
-#         return combis_possibles
-
-#     def _calcule_solution_rec(plat):
-#         """ Fonction rcursive du calcul d'une solution"""
-#         combinaisons_possibles = _coups_possibles(plat)
-#         if len(combinaisons_possibles) == 0:
-#             if plateau.est_gagnant(plat):
-#                 return True
-#         else:
-#             for combi in combinaisons_possibles:
-#                 # On inverse la combinaison (symetrie)
-#                 if plat.cases[combi[0]] == plateau.VIDE:
-#                     combi = combi[::-1]
-
-#                 # On inverse les cases du plateau
-#                 plat.cases[combi[0]] = plateau.VIDE
-#                 plat.cases[combi[1]] = plateau.VIDE
-#                 plat.cases[combi[2]] = plateau.PION
-
-#                 if _calcule_solution_rec(plat):
-#                     print(f'depart : {combi[0]}, arrivee : {combi[2]}')
-#                     return True
-
-#                 # On enleve le coup et on re-inverse les cases du plateau
-#                 plat.cases[combi[0]] = plateau.PION
-#                 plat.cases[combi[1]] = plateau.PION
-#                 plat.cases[combi[2]] = plateau.VIDE
-
-#     _calcule_solution_rec(plat)
+    return _calcule_solution_rec(plat, [])
 
 
 def demande_coup(plat):
@@ -211,4 +122,4 @@ def main():
 
 if __name__ == "__main__":
     plat = plateau.Plateau()
-    calcule_solution(plat)
+    print(calcule_solution(plat))
